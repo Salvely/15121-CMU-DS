@@ -61,7 +61,7 @@ public class Contact {
 	 * Should produce the following format: Michael,Trick,trick,1-412-268-3697
 	 */
 	public String toString() {
-		return ", ," + andrewId + "," + firstName + "," + lastName + "," + phone;
+		return firstName + "," + lastName + "," + andrewId + "," + phone;
 	}
 
 }

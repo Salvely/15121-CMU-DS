@@ -16,7 +16,7 @@ public class ContactList {
 	 * The array will later be made larger if needed.
 	 */
 	public ContactList() {
-		this.contactArray = new Contact[1];
+		contactArray = new Contact[1];
 		this.numContacts = 0;
 		this.capacity = 1;
 	}
@@ -46,7 +46,7 @@ public class ContactList {
 	 * it.
 	 */
 	private void enlarge() {
-		Contact new_arr[] = (Contact[]) new Object[capacity * 2];
+		Contact new_arr[] = new Contact[capacity * 2];
 		for(int i = 0; i < numContacts; i++) {
 			new_arr[i] = contactArray[i];
 		}
@@ -61,7 +61,7 @@ public class ContactList {
 	 */
 	private int findContact(String id) {
 		for(int i = 0; i < numContacts; i++) {
-			if(!compareTo(id,contactArray[i])) {
+			if(id.compareTo(contactArray[i].getAndrewId()) == 0) {
 				return i;
 			}
 		}
@@ -83,7 +83,7 @@ public class ContactList {
 		if(findContact(andrewId) != -1) {
 			return false;
 		}
-		Contact newPeople(andrewId,firstName,lastName,phone);
+		Contact newPeople = new Contact(andrewId,firstName,lastName,phone);
 		if(isFull()) {
 			enlarge();
 		}
@@ -134,13 +134,14 @@ public class ContactList {
 			enlarge();
 		}
 		// insert the element
-		Contact people(andrewId,firstName,lastName,phone);
+		Contact people = new Contact(andrewId,firstName,lastName,phone);
 		for(int i = numContacts; i > loc; i--) {
 			contactArray[i] = contactArray[i-1];
 		}
 		contactArray[loc] = people;
 		// update the instance variable
 		numContacts ++;
+		return true;
 	}
 
 	/**
@@ -175,7 +176,7 @@ public class ContactList {
 		if(index == -1) {
 			return false;
 		}
-		contactArray[index].phone = newNumber;
+		contactArray[index].setPhone(newNumber);
 		return true;
 	}
 
@@ -192,11 +193,12 @@ public class ContactList {
 	public void randomize() {
 		for(int i = 0; i <= numContacts - 2; i++) {
 			int min = i;
-			int max = n - 1;
-			int j = random.nextInt(max - min + 1) + min;
-			Contact tmp = ContactList[j];
-			ContactList[j] = ContactList[i];
-			ContactList[i] = tmp;
+			int max = numContacts - 1;
+			Random rand = new Random();
+			int j = rand.nextInt(max - min + 1) + min;
+			Contact tmp = contactArray[j];
+			contactArray[j] = contactArray[i];
+			contactArray[i] = tmp;
 		}
 	}
 
@@ -209,11 +211,11 @@ public class ContactList {
 	 * the call
 	 */
 	public void rotateLeft() {
-		Contact first = ContactList[0];
+		Contact first = contactArray[0];
 		for(int i = 0; i < numContacts - 1; i++) {
-			ContactList[i] = ContactList[i+1];
+			contactArray[i] = contactArray[i+1];
 		}
-		ContactList[numContacts - 1] = first;
+		contactArray[numContacts - 1] = first;
 	}
 
 	/**
@@ -224,9 +226,9 @@ public class ContactList {
 	 */
 	public void reverse() {
 		for(int i = 0; i < numContacts / 2; i++) {
-			Contact tmp = ContactList[i];
-			ContactList[i] = ContactList[numContacts - 1 - i];
-			ContactList[numContacts - 1 - i] = tmp;
+			Contact tmp = contactArray[i];
+			contactArray[i] = contactArray[numContacts - 1 - i];
+			contactArray[numContacts - 1 - i] = tmp;
 		}
 	}
 
@@ -245,9 +247,9 @@ public class ContactList {
 	 */
 	// @formatter:on
 	public String toString() {
-		String str = "";
+		String str = "There are " + numContacts+ " contacts:\n";
 		for(int i = 0; i < numContacts; i++) {
-			Contact People = ContactList[i];
+			Contact People = contactArray[i];
 			str += People.toString();
 			str += "\n";
 		}
