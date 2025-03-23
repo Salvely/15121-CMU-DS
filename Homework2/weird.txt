@@ -1,0 +1,6 @@
+Kavon,Abernathy,18,Biology,kabernat,Q1,54,HW1,61,Q2,63
+Betty,Murphy,24,InfoSys,bmurphy,Q1,99,HW1,73,Q2,63
+Cielo,Collier,23,CompSci,ccollier,Q1,61,HW1,99,Q2,52
+Darrel,Haley,23,Biology,dhaley,Q1,100,HW1,95,Q2,85
+Maida,Weber,18,Business,mweber,Q1,85,HW1,74,Q2,51,Q2,98
+Derrick,Haley,20,CompSci,dhaley,Q1,80,HW1,45,Q2,35
