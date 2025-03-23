@@ -2,6 +2,7 @@ package edu.cmu.qatar._15121.hw1;
 
 import java.util.Scanner;
 import java.io.FileReader;
+import java.util.Random;
 
 public class ContactListTester {
 

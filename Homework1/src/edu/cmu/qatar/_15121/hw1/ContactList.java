@@ -8,6 +8,8 @@ public class ContactList {
 	// the actual # of valid array elements (The array might have more space than
 	// this in it.)
 	private int numContacts;
+	// capacity of the contactArray
+	private int capacity;
 
 	/**
 	 * Constructs a `ContactList` object that can initially hold up to one contact.
@@ -16,6 +18,7 @@ public class ContactList {
 	public ContactList() {
 		this.contactArray = new Contact[1];
 		this.numContacts = 0;
+		this.capacity = 1;
 	}
 
 	/**
@@ -24,7 +27,7 @@ public class ContactList {
 	 * @return `true` if there are no contacts in the array, and `false` otherwise
 	 */
 	public boolean isEmpty() {
-		return false;
+		return numContacts == 0;
 	}
 
 	/**
@@ -33,7 +36,7 @@ public class ContactList {
 	 * @return `true` if array is full and `false` otherwise
 	 */
 	public boolean isFull() {
-		return false;
+		return numContacts == capacity;
 	}
 
 	/**
@@ -43,7 +46,12 @@ public class ContactList {
 	 * it.
 	 */
 	private void enlarge() {
-		return;
+		Contact new_arr[] = (Contact[]) new Object[capacity * 2];
+		for(int i = 0; i < numContacts; i++) {
+			new_arr[i] = contactArray[i];
+		}
+		contactArray = new_arr;
+		capacity *= 2;
 	}
 
 	/**
@@ -52,6 +60,11 @@ public class ContactList {
 	 * should do...
 	 */
 	private int findContact(String id) {
+		for(int i = 0; i < numContacts; i++) {
+			if(!compareTo(id,contactArray[i])) {
+				return i;
+			}
+		}
 		return -1;
 	}
 
@@ -67,7 +80,16 @@ public class ContactList {
 	 * @return True if the contact was successfully added and false otherwise
 	 */
 	public boolean addContact(String andrewId, String firstName, String lastName, String phone) {
-		return false;
+		if(findContact(andrewId) != -1) {
+			return false;
+		}
+		Contact newPeople(andrewId,firstName,lastName,phone);
+		if(isFull()) {
+			enlarge();
+		}
+		contactArray[numContacts] = newPeople;
+		numContacts += 1;
+		return true;
 	}
 
 	/**
@@ -99,7 +121,26 @@ public class ContactList {
 	 * @return True if the contact was successfully added and false otherwise
 	 */
 	public boolean insertContactAtLocation(int loc, String andrewId, String firstName, String lastName, String phone) {
-		return false;
+		// check if exists the same id, if exists, don't add
+		if(findContact(andrewId) == -1) {
+			return false;
+		}
+		// check if loc is reasonable
+		if(loc < 0 || loc > numContacts) {
+			return false;
+		}
+		// if full before inserting, then resize the array
+		if(isFull()) {
+			enlarge();
+		}
+		// insert the element
+		Contact people(andrewId,firstName,lastName,phone);
+		for(int i = numContacts; i > loc; i--) {
+			contactArray[i] = contactArray[i-1];
+		}
+		contactArray[loc] = people;
+		// update the instance variable
+		numContacts ++;
 	}
 
 	/**
@@ -111,7 +152,14 @@ public class ContactList {
 	 * @param id The andrewId of the contact to remove
 	 */
 	public void removeContact(String id) {
-		return;
+		int i = findContact(id);
+		if(i == -1) {
+			return;
+		}
+		for(int j = i; j < numContacts - 1; j++) {
+			contactArray[j] = contactArray[j + 1];
+		}
+		numContacts -= 1;
 	}
 
 	/**
@@ -123,7 +171,12 @@ public class ContactList {
 	 * @return True if the number was successfully changed and false otherwise
 	 */
 	public boolean changePhone(String id, String newNumber) {
-		return false;
+		int index = findContact(id);
+		if(index == -1) {
+			return false;
+		}
+		contactArray[index].phone = newNumber;
+		return true;
 	}
 
 	// @formatter:off
@@ -137,7 +190,14 @@ public class ContactList {
 	 */
 	// @formatter:on
 	public void randomize() {
-		return;
+		for(int i = 0; i <= numContacts - 2; i++) {
+			int min = i;
+			int max = n - 1;
+			int j = random.nextInt(max - min + 1) + min;
+			Contact tmp = ContactList[j];
+			ContactList[j] = ContactList[i];
+			ContactList[i] = tmp;
+		}
 	}
 
 	/**
@@ -149,7 +209,11 @@ public class ContactList {
 	 * the call
 	 */
 	public void rotateLeft() {
-		return;
+		Contact first = ContactList[0];
+		for(int i = 0; i < numContacts - 1; i++) {
+			ContactList[i] = ContactList[i+1];
+		}
+		ContactList[numContacts - 1] = first;
 	}
 
 	/**
@@ -159,7 +223,11 @@ public class ContactList {
 	 * jpritch, kfrank] it is [kfrank, jpritch, awaatif, nkuwari] after the call
 	 */
 	public void reverse() {
-		return;
+		for(int i = 0; i < numContacts / 2; i++) {
+			Contact tmp = ContactList[i];
+			ContactList[i] = ContactList[numContacts - 1 - i];
+			ContactList[numContacts - 1 - i] = tmp;
+		}
 	}
 
 	// @formatter:off
@@ -177,6 +245,12 @@ public class ContactList {
 	 */
 	// @formatter:on
 	public String toString() {
-		return "";
+		String str = "";
+		for(int i = 0; i < numContacts; i++) {
+			Contact People = ContactList[i];
+			str += People.toString();
+			str += "\n";
+		}
+		return str;
 	}
 }
