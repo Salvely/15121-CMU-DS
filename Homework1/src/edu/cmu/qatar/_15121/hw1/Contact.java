@@ -12,9 +12,15 @@ package edu.cmu.qatar._15121.hw1;
  */
 public class Contact {
 	private String andrewId;
+	private String firstName;
+	private String lastName;
+	private String phone;
 
 	public Contact(String andrewId, String firstName, String lastName, String phone) {
 		this.andrewId = andrewId;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.phone = phone;
 	}
 
 	public String getAndrewId() {
@@ -25,13 +31,37 @@ public class Contact {
 		this.andrewId = andrewId;
 	}
 
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
 	/**
 	 * A toString.
 	 * 
 	 * Should produce the following format: Michael,Trick,trick,1-412-268-3697
 	 */
 	public String toString() {
-		return ", ," + andrewId + ",";
+		return ", ," + andrewId + "," + firstName + "," + lastName + "," + phone;
 	}
 
 }
