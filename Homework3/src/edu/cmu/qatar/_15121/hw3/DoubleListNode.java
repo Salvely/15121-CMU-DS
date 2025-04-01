@@ -14,4 +14,8 @@ public class DoubleListNode<NodeDataType> {
 	public String toString() {
 		return data.toString();
 	}
+
+	public NodeDataType getData() {
+		return data;
+	}
 }

@@ -1,5 +1,7 @@
 package edu.cmu.qatar._15121.hw3;
 
+import java.util.NoSuchElementException;
+
 public class DoublyLinkedList<ListType> {
 	// The head of the list
 	private DoubleListNode<ListType> head;
@@ -26,7 +28,39 @@ public class DoublyLinkedList<ListType> {
 	 * List Content Forwards: A –> B –> C
 	 * List Content Backwards: C –> B –> A
 	 */
-	public String toString() {}
+	public String toString() {
+		String str = "List Content Forwards: ";
+
+		// print forward
+		DoubleListNode<ListType> p = head;
+		int index = size;
+		while(index != 0) {
+			str += p.toString();
+			index --;
+			p = p.next;
+			if(index != 0) {
+				str += " –> ";
+			}
+		}
+
+		str += "\n";
+
+		// print backward
+		str += "List Content Backwards: ";
+		p = head;
+		index = size;
+		while(index != 0) {
+			str += p.toString();
+			index --;
+			p = p.prev;
+			if(index != 0) {
+				str += " –> ";
+			}
+		}
+
+		str += "\n";
+		return str;
+	}
 
 	/**
 	 * Adds a node containing value after the specified position in the list.
@@ -36,7 +70,12 @@ public class DoublyLinkedList<ListType> {
 	 * @param value The value to add to the list
 	 */
 	private void addAfter(DoubleListNode<ListType> prevNode, ListType value) {
-
+		DoubleListNode<ListType> new_node = new DoubleListNode<>(value);
+		new_node.next = prevNode.next;
+		new_node.prev = prevNode;
+		prevNode.next.prev = new_node;
+		prevNode.next = new_node;
+		size ++;
 	}
 
 	/**
@@ -48,7 +87,12 @@ public class DoublyLinkedList<ListType> {
 	 * @param value The value to add to the list
 	 */
 	private void addBefore(DoubleListNode<ListType> postNode, ListType value) {
-
+		DoubleListNode<ListType> new_node = new DoubleListNode<>(value);
+		new_node.next = postNode;
+		new_node.prev = postNode.prev;
+		postNode.prev.next = new_node;
+		postNode.prev = new_node;
+		size ++;
 	}
 
 	/**
@@ -57,7 +101,14 @@ public class DoublyLinkedList<ListType> {
 	 * @param value The value to add to the list
 	 */
 	public void addHead(ListType value) {
-
+		if(head == null) {
+			head = new DoubleListNode<>(value);
+			head.next = head;
+			head.prev = head;
+		}
+		else {
+			addBefore(head,value);
+		}
 	}
 
 	/**
@@ -66,7 +117,7 @@ public class DoublyLinkedList<ListType> {
 	 * @param value The value to be added to the list
 	 */
 	public void add(ListType value) {
-
+		addHead(value);
 	}
 
 	/**
@@ -74,7 +125,7 @@ public class DoublyLinkedList<ListType> {
 	 * @return The number of items in the list
 	 */
 	public int size() {
-
+		return size;
 	}
 
 	/**
@@ -82,7 +133,7 @@ public class DoublyLinkedList<ListType> {
 	 * @return true if the list is empty and false otherwise
 	 */
 	public boolean isEmpty() {
-
+		return size == 0;
 	}
 
 	/**
@@ -92,7 +143,16 @@ public class DoublyLinkedList<ListType> {
 	 * @return The node of the first instance of value in the list
 	 */
 	private DoubleListNode<ListType> nodeContaining(ListType value) {
-
+		DoubleListNode<ListType> p = head;
+		int index = size;
+		while(index != 0) {
+			if(p.getData() == value) {
+				return p;
+			}
+			p = p.next;
+			index --;
+		}
+		throw new NoSuchElementException("nodeContaining(): no such element");
 	}
 
 	/**
@@ -101,7 +161,18 @@ public class DoublyLinkedList<ListType> {
 	 * @return true if the item is in the list and false otherwise
 	 */
 	public boolean contains(ListType value) {
-
+		DoubleListNode<ListType> p = head;
+		int index = size;
+		boolean find = false;
+		while(index != 0) {
+			if(p.getData() == value) {
+				find = true;
+				break;
+			}
+			p = p.next;
+			index --;
+		}
+		return find;
 	}
 
 	/**
@@ -111,7 +182,15 @@ public class DoublyLinkedList<ListType> {
 	 * @return The node at the provided index
 	 */
 	private DoubleListNode<ListType> nodeAtIndex(int index) {
-
+		if(index >= size()) {
+			throw new IndexOutOfBoundsException("nodeAtIndex(): index " + index + " out of bounds.");
+		}
+		DoubleListNode<ListType> p = head;
+		while(index != 0) {
+			index --;
+			p = p.next;
+		}
+		return p;
 	}
 
 	/**
@@ -121,7 +200,8 @@ public class DoublyLinkedList<ListType> {
 	 * @return The item
 	 */
 	public ListType get(int index) {
-
+		DoubleListNode<ListType> node = nodeAtIndex(index);
+		return node.getData();
 	}
 
 	/**
@@ -132,7 +212,8 @@ public class DoublyLinkedList<ListType> {
 	 * @param value The value to add to the list
 	 */
 	public void add(int index, ListType value) {
-
+		DoubleListNode<ListType> node = nodeAtIndex(index);
+		addBefore(node,value);
 	}
 
 	/**
@@ -142,7 +223,9 @@ public class DoublyLinkedList<ListType> {
 	 * @return The item contained in this node
 	 */
 	public ListType remove(DoubleListNode<ListType> node) {
-
+		node.prev.next = node.next;
+		node.next.prev = node.prev;
+		return node.getData();
 	}
 
 	/**
@@ -151,7 +234,8 @@ public class DoublyLinkedList<ListType> {
 	 * @param value The value of the item to remove.
 	 */
 	public void remove(ListType value) {
-
+		DoubleListNode<ListType> node = nodeContaining(value);
+		remove(node);
 	}
 
 	/**
@@ -162,7 +246,8 @@ public class DoublyLinkedList<ListType> {
 	 * @return The item that was removed
 	 */
 	public ListType remove(int index) {
-
+		DoubleListNode<ListType> node = nodeAtIndex(index);
+		return remove(node);
 	}
 
 	/**
@@ -173,7 +258,17 @@ public class DoublyLinkedList<ListType> {
 	 * @param target The item to remove from the list
 	 */
 	public void removeLast(ListType target) {
-
+		DoubleListNode<ListType> p = head;
+		int index = size;
+		while(index != 0) {
+			if(p.getData() == target) {
+				remove(p);
+				return;
+			}
+			p = p.prev;
+			index --;
+		}
+		throw new NoSuchElementException("nodeContaining(): no such element");
 	}
 
 	/**
@@ -182,6 +277,13 @@ public class DoublyLinkedList<ListType> {
 	 * @return A singly linked list that contains the same elements as this list.
 	 */
 	public SinglyLinkedList<ListType> asSinglyLinkedList() {
-
+		SinglyLinkedList<ListType> lst = new SinglyLinkedList<>();
+		int index = size;
+		DoubleListNode<ListType> p = head;
+		while(index != 0) {
+			lst.add(p.getData());
+			index --;
+		}
+		return lst;
 	}
 }
